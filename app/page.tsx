@@ -11,6 +11,7 @@ import {
     CheckCircle,
     Cloud,
     Github,
+    Globe,
     Heart,
     MessageSquare,
     Moon,
@@ -18,9 +19,8 @@ import {
     Sparkles,
     Star,
     Sun,
-    Users,
     X,
-    Zap,
+    Zap
 } from "lucide-react"
 
 interface ApiResponse {
@@ -108,6 +108,11 @@ export default function HomePage() {
     const toggleTheme = () => {
         setIsDark(!isDark)
         document.documentElement.classList.toggle("dark")
+        localStorage.setItem("theme", isDark ? "light" : "dark")
+        if (typeof window !== "undefined") {
+            const root = window.document.documentElement
+            root.classList.toggle("dark")
+        }
     }
 
     return (
@@ -152,7 +157,9 @@ export default function HomePage() {
                         </div>
                         <div className="space-y-1">
                             <span className="font-bold text-xl text-foreground leading-tight tracking-tight">Yomon so'zlar</span>
-                            <div className="text-xs text-muted-foreground font-medium">Profanity Manager Pro</div>
+                            <div className="text-xs text-muted-foreground font-medium">O'zbek tilidagi nojo'ya so'zlar
+                                ro'yxati
+                            </div>
                         </div>
                     </div>
 
@@ -188,76 +195,16 @@ export default function HomePage() {
                             <div className="flex flex-wrap justify-center gap-2 mt-6">
                                 <Badge variant="secondary" className="text-xs font-medium px-3 py-1">
                                     <Star className="h-3 w-3 mr-1"/>
-                                    Professional
+                                    Open Source
                                 </Badge>
                                 <Badge variant="secondary" className="text-xs font-medium px-3 py-1">
                                     <Zap className="h-3 w-3 mr-1"/>
-                                    Fast & Secure
+                                    Fast & Reliable
                                 </Badge>
                                 <Badge variant="secondary" className="text-xs font-medium px-3 py-1">
                                     <Heart className="h-3 w-3 mr-1"/>
-                                    User Friendly
+                                    Made with Love
                                 </Badge>
-                            </div>
-                        </div>
-
-                        <div className="flex justify-center">
-                            <div className="relative group">
-                                <div
-                                    className="absolute inset-0 bg-foreground/20 rounded-[2rem] blur-2xl opacity-40 group-hover:opacity-70 transition-all duration-700 animate-pulse"></div>
-                                <div
-                                    className="absolute inset-0 bg-foreground/10 rounded-[2rem] blur-xl opacity-30 group-hover:opacity-50 transition-all duration-500"></div>
-                                <div
-                                    className="relative w-48 h-48 rounded-[2rem] bg-gradient-to-br from-foreground to-foreground/80 p-1.5 shadow-2xl group-hover:scale-105 transition-all duration-500">
-                                    <div
-                                        className="w-full h-full rounded-[26px] bg-background flex items-center justify-center relative overflow-hidden">
-                                        <div
-                                            className="absolute inset-0 bg-gradient-to-br from-foreground/5 to-foreground/10"></div>
-                                        <div className="absolute inset-0 animate-shimmer"></div>
-                                        <div className="relative z-10">
-                                            <div
-                                                className="absolute -top-8 -left-6 transform -rotate-12 group-hover:-rotate-6 transition-transform duration-500">
-                                                <div className="relative">
-                                                    <MessageSquare
-                                                        className="h-12 w-12 text-foreground/80 drop-shadow-xl"/>
-                                                    <Sparkles
-                                                        className="h-4 w-4 text-foreground/60 absolute -top-1 -right-1 animate-pulse"/>
-                                                    <div
-                                                        className="absolute inset-0 bg-foreground/10 rounded-lg blur-sm"></div>
-                                                </div>
-                                            </div>
-                                            <div
-                                                className="absolute -top-4 right-4 transform rotate-12 group-hover:rotate-6 transition-transform duration-500">
-                                                <div className="relative">
-                                                    <MessageSquare
-                                                        className="h-10 w-10 text-foreground/60 drop-shadow-xl"/>
-                                                    <Sparkles
-                                                        className="h-3 w-3 text-foreground/40 absolute -top-0.5 -right-0.5 animate-pulse delay-500"/>
-                                                    <div
-                                                        className="absolute inset-0 bg-foreground/10 rounded-lg blur-sm"></div>
-                                                </div>
-                                            </div>
-                                            <div className="flex space-x-8 mt-12">
-                                                <div className="relative group/avatar">
-                                                    <div
-                                                        className="absolute inset-0 bg-foreground/20 rounded-full blur-md group-hover/avatar:blur-lg transition-all duration-300"></div>
-                                                    <div
-                                                        className="relative w-12 h-12 rounded-full border-4 border-foreground/60 bg-gradient-to-br from-muted to-muted/80 shadow-xl group-hover/avatar:scale-110 transition-transform duration-300"></div>
-                                                    <div
-                                                        className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-foreground border-3 border-background shadow-lg animate-pulse"></div>
-                                                </div>
-                                                <div className="relative group/avatar">
-                                                    <div
-                                                        className="absolute inset-0 bg-foreground/20 rounded-full blur-md group-hover/avatar:blur-lg transition-all duration-300"></div>
-                                                    <div
-                                                        className="relative w-12 h-12 rounded-full border-4 border-foreground/40 bg-gradient-to-br from-muted/60 to-muted shadow-xl group-hover/avatar:scale-110 transition-transform duration-300"></div>
-                                                    <div
-                                                        className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-foreground/80 border-3 border-background shadow-lg animate-pulse delay-300"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
 
@@ -401,28 +348,74 @@ export default function HomePage() {
                 <div className="container mx-auto px-6">
                     <div className="flex flex-col items-center space-y-8">
                         <div className="flex items-center space-x-3">
-                            {[MessageSquare, Users, Github, Cloud].map((Icon, index) => (
-                                <Button
-                                    key={index}
-                                    variant="ghost"
-                                    size="icon"
-                                    className="h-14 w-14 rounded-2xl hover:bg-foreground/10 hover:scale-125 transition-all duration-500 group relative overflow-hidden"
-                                >
+                            {/* Footer Icons with Links */}
+                            <Button
+                                asChild
+                                variant="ghost"
+                                size="icon"
+                                className="h-14 w-14 rounded-2xl hover:bg-foreground/10 hover:scale-125 transition-all duration-500 group relative overflow-hidden"
+                            >
+                                <a href="https://t.me/jakhangir_blog" target="_blank" rel="noopener noreferrer">
                                     <div
                                         className="absolute inset-0 bg-foreground/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                    <Icon
+                                    <MessageSquare
                                         className="h-7 w-7 text-muted-foreground group-hover:text-foreground transition-all duration-300 relative z-10"/>
-                                </Button>
-                            ))}
+                                </a>
+                            </Button>
+
+                            <Button
+                                asChild
+                                variant="ghost"
+                                size="icon"
+                                className="h-14 w-14 rounded-2xl hover:bg-foreground/10 hover:scale-125 transition-all duration-500 group relative overflow-hidden"
+                            >
+                                <a href="https://dev.jakhangir.uz" target="_blank" rel="noopener noreferrer">
+                                    <div
+                                        className="absolute inset-0 bg-foreground/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                    <Globe
+                                        className="h-7 w-7 text-muted-foreground group-hover:text-foreground transition-all duration-300 relative z-10"/>
+                                </a>
+                            </Button>
+
+                            <Button
+                                asChild
+                                variant="ghost"
+                                size="icon"
+                                className="h-14 w-14 rounded-2xl hover:bg-foreground/10 hover:scale-125 transition-all duration-500 group relative overflow-hidden"
+                            >
+                                <a href="https://github.com/milliytech/uzbek-badwords" target="_blank"
+                                   rel="noopener noreferrer">
+                                    <div
+                                        className="absolute inset-0 bg-foreground/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                    <Github
+                                        className="h-7 w-7 text-muted-foreground group-hover:text-foreground transition-all duration-300 relative z-10"/>
+                                </a>
+                            </Button>
+
+                            <Button
+                                asChild
+                                variant="ghost"
+                                size="icon"
+                                className="h-14 w-14 rounded-2xl hover:bg-foreground/10 hover:scale-125 transition-all duration-500 group relative overflow-hidden"
+                            >
+                                <a href="https://api.badwords.milliytech.uz/media/words/bad_words.csv" target="_blank"
+                                   rel="noopener noreferrer">
+                                    <div
+                                        className="absolute inset-0 bg-foreground/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                    <Cloud
+                                        className="h-7 w-7 text-muted-foreground group-hover:text-foreground transition-all duration-300 relative z-10"/>
+                                </a>
+                            </Button>
                         </div>
+
                         <p className="text-center text-muted-foreground max-w-2xl text-lg text-pretty leading-relaxed font-medium">
-                            Bu veb-sayt o'zbek tilida yomon so'zlar ro'yxatini saqlash va ko'rish uchun yaratilgan. Siz
-                            ham yomon
-                            so'zlar ro'yxatiga bilgan so'zlaringizni qo'shishingiz mumkin.
+                            Bu veb-sayt o'zbek tilida yomon so'zlar ro'yxatini saqlash va ko'rish uchun yaratilgan.
+                            Siz ham yomon so'zlar ro'yxatiga bilgan so'zlaringizni qo'shishingiz mumkin.
                         </p>
                     </div>
                 </div>
             </footer>
+
 
             {showDisclaimer && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
