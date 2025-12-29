@@ -1,41 +1,38 @@
-# Build stage
-FROM node:20-alpine AS builder
+# 1. Build bosqichi
+FROM node:22-alpine AS builder
 
 WORKDIR /app
 
-# Copy package files
-COPY package.json package-lock.json* ./
+# pnpm uchun corepack yoqamiz
+RUN corepack enable
 
-# Install dependencies
-RUN npm ci --legacy-peer-deps
+# package fayllarni ko‘chiramiz
+COPY package.json pnpm-lock.yaml* ./
 
-# Copy source code
+# dependency o‘rnatamiz (lockfile bo‘yicha)
+RUN pnpm install --no-frozen-lockfile
+
+# source code ko‘chiramiz
 COPY . .
 
-# Build the application
-RUN npm run build
+# Next.js build
+RUN pnpm build
 
-# Production stage
-FROM node:20-alpine AS runner
+# 2. Production bosqichi
+FROM node:22-alpine AS runner
 
 WORKDIR /app
-
 ENV NODE_ENV=production
 
-# Create non-root user for security
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+RUN corepack enable
 
-# Copy built assets from builder stage
+# kerakli fayllarni ko‘chiramiz
+COPY --from=builder /app/package.json ./
+COPY --from=builder /app/pnpm-lock.yaml ./
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
-USER nextjs
 
 EXPOSE 3009
 
-ENV PORT=3009
-ENV HOSTNAME="0.0.0.0"
-
-CMD ["node", "server.js"]
+CMD ["pnpm", "start"]

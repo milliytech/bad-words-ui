@@ -1,11 +1,8 @@
 services:
-  web:
-    build:
-      context: .
-      dockerfile: Dockerfile
+  nextjs:
+    build: .
     ports:
       - "3009:3009"
     environment:
       - NODE_ENV=production
-      - NEXT_PUBLIC_BADWORDS_API=${NEXT_PUBLIC_BADWORDS_API:-https://api.badwords.milliytech.uz}
-    restart: unless-stopped
+    restart: always
